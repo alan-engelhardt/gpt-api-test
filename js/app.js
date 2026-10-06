@@ -17,7 +17,7 @@ function renderProducts(){
  grid.innerHTML=products.map(p=>`<article class="card">
  <a class="card-image" href="product.html?id=${p.id}"><img src="${image(p)}" alt="${productName(p)}"></a>
  <div class="card-info"><p class="card-brand">${p.brandname||""}</p><h3 class="card-title"><a href="product.html?id=${p.id}">${productName(p)}</a></h3>
- <span class="price">${price(p)} kr.</span>${p.discount?\`<span class="discount">-${p.discount}%</span>\`:""}</div></article>`).join("");
+ <span class="price">${price(p)} kr.</span>${p.discount?`<span class="discount">-${p.discount}%</span>`:""}</div></article>`).join("");
  status.textContent=products.length?`${products.length} produkter`:"Ingen produkter fundet";
 }
 function renderCategories(list){
@@ -25,7 +25,7 @@ function renderCategories(list){
 }
 async function loadProducts(category=""){
  state.category=category;
- try{status.textContent="Henter produkter…";const endpoint=category?\`${API}/productlist/${category}?limit=20\`:\`${API}/productlist/1?limit=20\`;state.products=await getJson(endpoint);renderProducts()}
+ try{status.textContent="Henter produkter…";const endpoint=category?`${API}/productlist/${category}?limit=20`:`${API}/productlist/1?limit=20`;state.products=await getJson(endpoint);renderProducts()}
  catch(e){status.textContent="Kunne ikke hente produkter fra API'et."}
 }
 categories.addEventListener("click",e=>{const btn=e.target.closest(".category");if(!btn)return;categories.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));btn.classList.add("active");loadProducts(btn.dataset.category)});
