@@ -1,0 +1,10 @@
+const API="https://kea-alt-del.dk/t7/api";
+const IMAGE_BASE="https://kea-alt-del.dk/t7/images/webp/1000";
+const detail=document.querySelector("#productDetail");
+const id=new URLSearchParams(location.search).get("id");
+const productName=p=>p.productdisplayname||p.name||"Produkt";
+const money=p=>Number(p.price)||0;
+const metaRow=(label,value)=>value?\`<div><dt>${label}</dt><dd>${value}</dd></div>\`:"";
+async function getProduct(){if(!id)throw new Error("Mangler produkt-id");const res=await fetch(\`${API}/product/${id}\`);if(!res.ok)throw new Error("Produkt ikke fundet");return res.json()}
+function addToCart(p){const cart=JSON.parse(localStorage.getItem("nord-cart")||"[]");const item=cart.find(i=>String(i.id)===String(p.id));if(item)item.qty++;else cart.push({id:p.id,name:productName(p),price:money(p),image:`${IMAGE_BASE}/${p.id}.webp`,qty:1});localStorage.setItem("nord-cart",JSON.stringify(cart));alert("Produktet er lagt i kurven.")}
+(async()=>{try{const p=await getProduct();const name=productName(p);detail.innerHTML=\`<div><img class="detail-image" src="${IMAGE_BASE}/${p.id}.webp" alt="${name}"></div><div class="detail-copy"><p class="detail-brand">${p.brandname||""}</p><h1>${name}</h1><p class="detail-price">${money(p)} kr. ${p.discount?\`<span class="discount">-${p.discount}%</span>\`:""}</p><p class="description">${p.description||"Ingen beskrivelse tilgængelig."}</p><dl class="meta">${metaRow("Kategori",p.categoryname)}${metaRow("Underkategori",p.subcategoryname)}${metaRow("Køn",p.gender)}${metaRow("Sæson",p.season)}${metaRow("Farve",p.colour||p.color)}${metaRow("Materiale",p.material)}</dl><button id="addToCart" class="button">Læg i kurv</button></div>\`;document.querySelector("#addToCart").addEventListener("click",()=>addToCart(p))}catch(e){detail.innerHTML="<p>Produktet kunne ikke hentes.</p>"}})();
