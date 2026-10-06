@@ -22,10 +22,9 @@ function renderProducts(){
 }
 function renderCategories(data){
  const list=Array.isArray(data)?data:(data.categories||data.data||[]);
- categories.innerHTML='<button class="category active" data-category="">Alle</button>'+list.map((c,index)=>{
-  const id=typeof c==="object" ? (c.id??c.categoryid??c.category_id) : index+1;
-  const name=typeof c==="string" ? c : (c.categoryname??c.category??c.name??c.title);
-  return name ? '<button class="category" data-category="'+id+'">'+name+'</button>' : "";
+ categories.innerHTML='<button class="category active" data-category="">Alle</button>'+list.map(c=>{
+  const name=typeof c==="string" ? c : c.category;
+  return name ? '<button class="category" data-category="'+encodeURIComponent(name)+'">'+name+'</button>' : "";
  }).join("");
 }
 async function loadProducts(category=""){
