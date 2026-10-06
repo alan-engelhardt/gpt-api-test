@@ -1,5 +1,5 @@
-const API="https://kea-alt-del.dk/t7/api";
-const IMAGE_BASE="https://kea-alt-del.dk/t7/images/webp/640";
+const API="/api";
+const IMAGE_BASE="/images/webp/640";
 const state={products:[],category:null,sort:"default",cart:JSON.parse(localStorage.getItem("nord-cart")||"[]")};
 const $=s=>document.querySelector(s);
 const grid=$("#productGrid"),categories=$("#categories"),status=$("#status"),sort=$("#sort");
@@ -42,4 +42,3 @@ $("#cartItems").addEventListener("click",e=>{const b=e.target.closest("[data-act
 function toggleCart(open){$("#cartDrawer").classList.toggle("open",open);$("#overlay").classList.toggle("show",open);$("#cartDrawer").setAttribute("aria-hidden",String(!open))}
 $("#cartButton").addEventListener("click",()=>toggleCart(true));$("#closeCart").addEventListener("click",()=>toggleCart(false));$("#overlay").addEventListener("click",()=>toggleCart(false));$("#checkout").addEventListener("click",()=>alert("Checkout er ikke koblet til en betalingsløsning endnu."));
 (async()=>{try{renderCart();const cats=await getJson(API+"/categories");renderCategories(cats);await loadProducts()}catch(e){status.textContent="Kunne ikke hente data fra API'et."}})();
-export {addToCart};
