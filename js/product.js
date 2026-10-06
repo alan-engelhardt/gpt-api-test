@@ -1,5 +1,5 @@
-const API="https://kea-alt-del.dk/t7/api";
-const IMAGE_BASE="https://kea-alt-del.dk/t7/images/webp/1000";
+const API="/api";
+const IMAGE_BASE="/images/webp/1000";
 const detail=document.querySelector("#productDetail");
 const id=new URLSearchParams(location.search).get("id");
 const productName=p=>p.productdisplayname||p.name||"Produkt";
